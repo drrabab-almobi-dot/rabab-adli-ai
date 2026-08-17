@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://drrabab-almobi-dot.github.io/rabab-adli-ai/sitemap.xml
