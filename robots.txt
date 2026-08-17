@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://drrabab-almobi-dot.github.io/rabab-adli-ai/sitemap.xml
+
+# IndexNow key for Bing
+# https://drrabab-almobi-dot.github.io/rabab-adli-ai/a7f3d291e8b64c05f1e2d39a8c7b0f52.txt
