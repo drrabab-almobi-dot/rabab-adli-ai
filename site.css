@@ -104,3 +104,17 @@
   .directory-list small { display: block; color: var(--muted); }
   .site-content .contact-address { direction: ltr; unicode-bidi: isolate; display: inline-block; font-family: var(--mono); }
   :focus-visible { outline: 2px solid var(--azure); outline-offset: 3px; }
+
+.notary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.notary-table th,
+.notary-table td {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  text-align: start;
+}
+.notary-table th {
+  background: var(--panel);
+}
