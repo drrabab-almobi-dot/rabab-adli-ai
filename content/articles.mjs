@@ -1,3 +1,4 @@
+import { entityArticles } from './entity-pages.mjs';
 import mojServices from './moj-services.mjs';
 
 export default [
@@ -93,4 +94,5 @@ export default [
     ],
   },
   ...mojServices,
+  ...entityArticles,
 ];

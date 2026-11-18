@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import guidance from '../content/entity-guidance.mjs';
+import { popularEntities, popularEntityNotes } from '../content/entity-pages.mjs';
 import { site, escapeHtml } from './site-layout.mjs';
 
 /** Must stay in sync with entitySlug() in src/lib/slug.ts */
@@ -36,17 +37,20 @@ const categoryGuides = {
   'النيابة العامة': ['public-prosecution', 'التواصل مع النيابة العامة والقنوات الرسمية'],
 };
 
-export function courtPage(e, { regionSlug, peers, duplicateName, serviceTitles }) {
+export function courtPage(e, { regionSlug, locality, peers, nameQualifier, featuredGuides, serviceTitles }) {
   const slug = entitySlug(e);
   const pathname = `courts/${slug}/`;
   const url = `${site}/courts/${encodeURIComponent(slug)}/`;
   const regionPath = `regions/${regionSlug}.html`;
-  const title = `${e.name} | البريد الرسمي - ${e.region}${duplicateName ? ` (${e.id})` : ''}`;
-  const description = `${title}. عنوان البريد ${e.email}، وتصنيف الجهة ${e.category}، وروابط لاستعراض الجهات في المنطقة والتحقق من قناة التواصل.`;
+  const heading = e.name + nameQualifier;
+  const title = `${popularEntities.get(e.id) ?? heading} | بريد التواصل والبيانات | دليل التواصل العدلي`;
+  const location = locality ? `${locality}، ${e.region}` : e.region;
+  const description = `بريد التواصل المدرج لجهة ${heading} ضمن تصنيف ${e.category} في ${location}. راجع الجهة وقناة الاستفسار المناسبة قبل المراسلة.`;
   const name = escapeHtml(e.name);
   const region = escapeHtml(e.region);
   const category = escapeHtml(e.category);
   const email = escapeHtml(e.email);
+  const localNote = popularEntityNotes.get(e.id);
   const paragraph = guidance[e.category];
   if (!paragraph) throw new Error(`Missing contact guidance for category: ${e.category}`);
   const guide = categoryGuides[e.category] ?? (/محاكم|دوائر/.test(e.category)
@@ -56,10 +60,9 @@ export function courtPage(e, { regionSlug, peers, duplicateName, serviceTitles }
   const service = serviceByCategory[e.category] ?? 'najiz-service-complaints';
   const serviceTitle = serviceTitles.get(service);
   if (!serviceTitle) throw new Error(`Missing service guide: ${service}`);
-  const similar = peers.filter((entity) => entity.id !== e.id).slice(0, 8);
-  const similarList = similar.length
-    ? `<ul>${similar.map((entity) => `<li><a href="../${encodeURIComponent(entitySlug(entity))}/">${escapeHtml(entity.name)}</a></li>`).join('')}</ul>`
-    : '<p>يمكنك الرجوع إلى صفحة المنطقة لاستعراض التصنيفات الأخرى ومقارنة بيانات التواصل المنشورة للجهات المدرجة فيها.</p>';
+  const recommendedGuides = featuredGuides.map(({ slug, title }) =>
+    `<li><a href="../../articles/${slug}.html">${escapeHtml(title)}</a></li>`).join('');
+  const similarList = `<ul>${peers.map((entity) => `<li><a href="../${encodeURIComponent(entitySlug(entity))}/">${escapeHtml(entity.name)}</a> <small>${escapeHtml(entity.region)}</small></li>`).join('')}</ul>`;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'GovernmentOrganization',
@@ -79,7 +82,7 @@ export function courtPage(e, { regionSlug, peers, duplicateName, serviceTitles }
     ],
   };
   const body = `<nav aria-label="مسار الصفحة"><a href="../../">الرئيسية</a> ← <a href="../../${regionPath}">${region}</a> ← <span aria-current="page">${name}</span></nav>
-<h1>${name}</h1>
+<h1>${escapeHtml(heading)}</h1>
 <div class="directory-list">
   <p>${region} · ${category}</p>
   <h2>البريد الإلكتروني</h2>
@@ -87,14 +90,17 @@ export function courtPage(e, { regionSlug, peers, duplicateName, serviceTitles }
 </div>
 <section aria-labelledby="entity-about">
   <h2 id="entity-about">عن هذه الجهة</h2>
-  <p>يظهر اسم «${name}» في دليل التواصل العدلي ضمن تصنيف «${category}» في ${region}. تعرض البطاقة عنوان التواصل المدرج لهذا الاسم، ويمكنك مقارنة التصنيف والمنطقة بما يرد في مستندك قبل اختيار الجهة. تحقّق من العنوان والغرض من القناة في المصدر الرسمي قبل إرسال أي بيانات.</p>
+  <p>تُدرج بطاقة «${escapeHtml(heading)}» ضمن فئة «${category}» في ${escapeHtml(location)}. طابق الاسم الكامل مع الإشعار أو المستند، ثم تحقق من أن العنوان المنشور يخص الجهة والغرض من مراسلتها.</p>
 </section>
 <section aria-labelledby="entity-contact">
-  <h2 id="entity-contact">متى تراسل هذه الجهة؟</h2>
+  <h2 id="entity-contact">متى وكيف تراسل هذه الجهة؟</h2>
+  ${localNote ? `<p>${escapeHtml(localNote)}</p>` : ''}
   <p>${escapeHtml(paragraph)}${guideLink}</p>
+  <p>إذا احتجت إلى السؤال عن قناة إجراء، اذكر «${name}» في موضوع الرسالة بعد مطابقة الاسم في المصدر الرسمي. اكتب سؤالاً واحداً عن الإجراء واترك المستندات والبيانات الشخصية للقناة المعتمدة.</p>
 </section>
+${recommendedGuides ? `<section aria-labelledby="entity-guides"><h2 id="entity-guides">أدلة عن الجهة وإجراءاتها</h2><ul>${recommendedGuides}</ul></section>` : ''}
 <section aria-labelledby="similar-entities">
-  <h2 id="similar-entities">جهات مشابهة في المنطقة</h2>
+  <h2 id="similar-entities">جهات قريبة أو من التصنيف نفسه</h2>
   ${similarList}
 </section>
 <p>استعرض <a href="../../${regionPath}">جهات ${region}</a> أو ارجع إلى <a href="../../#q">البحث في الدليل</a>. تجد في <a href="../../articles/">المدونة</a> أدلة عن القنوات والخدمات الرسمية، ومنها <a href="../../articles/${service}.html">${escapeHtml(serviceTitle)}</a>.</p>`;

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
-import { generateSitePages } from './scripts/generate-site-pages.mjs';
+import { generateSitePages, homepageDirectory } from './scripts/generate-site-pages.mjs';
 import { footerNavigation, header } from './scripts/site-layout.mjs';
 
 let siteBase = '/';
@@ -17,6 +17,7 @@ export default defineConfig({
         return html
           .replace('<!-- site-style -->', () => `<style>${readFileSync('public/site.css', 'utf8')}</style>`)
           .replace('<!-- site-header -->', header(0, ''))
+          .replace('<!-- site-popular -->', homepageDirectory())
           .replace('<!-- site-footer-links -->', footerNavigation(0, ''));
       },
       configureServer(server) {
