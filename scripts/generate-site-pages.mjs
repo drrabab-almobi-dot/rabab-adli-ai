@@ -85,6 +85,7 @@ function articlePage({ slug, title, description, faq = [], source, entityIds = [
     body: `<article>
 <h1>${escapeHtml(title)}</h1>
 ${articleBody}${entityLinks}${tables}
+<p class="article-disclaimer"><small>هذا المقال معلومات عامة ولا يُعد استشارة قانونية. تحقق دائماً من المصدر الرسمي. آخر مراجعة قانونية: 18 نوفمبر 2026.</small></p>
 ${faqBody ? `<section aria-labelledby="article-faq">
 <h2 id="article-faq">الأسئلة الشائعة</h2>
 ${faqBody}
