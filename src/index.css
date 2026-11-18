@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;600;700&family=IBM+Plex+Mono&display=swap');
+@import 'tailwindcss';
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --ink: #090D18;
+  --panel: #121A2E;
+  --panel-2: #1A2440;
+  --line: #26314E;
+  --azure: #3AA6FF;
+  --azure-dim: #2176C7;
+  --gold: #D9A94E;
+  --gold-soft: #E8C57A;
+  --text: #EDF1F8;
+  --muted: #8C97B3;
+  --danger: #E06666;
+  --radius: 14px;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --display: 'Cairo', sans-serif;
+  --body: 'Tajawal', sans-serif;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1100px 600px at 85% -10%, rgba(58,166,255,.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(217,169,78,.07), transparent 55%),
+    var(--ink);
+  color: var(--text);
+  font-family: var(--body);
+  min-height: 100vh;
+  line-height: 1.6;
+  direction: rtl;
+}
+
+::selection { background: rgba(58,166,255,.35); }
+a { color: inherit; }

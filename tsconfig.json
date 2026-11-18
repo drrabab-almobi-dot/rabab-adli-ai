@@ -1,0 +1,11 @@
+{
+  "include": ["vite.config.ts"],
+  "exclude": ["node_modules", "dist", "public/courts", "src"],
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "noEmit": true,
+    "moduleResolution": "bundler",
+    "skipLibCheck": true
+  }
+}

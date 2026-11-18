@@ -55,128 +55,7 @@
   }
 }
 </script>
-<style>  :root{
-    --ink: #090D18;
-    --panel: #121A2E;
-    --panel-2: #1A2440;
-    --line: #26314E;
-    --azure: #3AA6FF;
-    --azure-dim: #2176C7;
-    --gold: #D9A94E;
-    --gold-soft: #E8C57A;
-    --text: #EDF1F8;
-    --muted: #8C97B3;
-    --danger: #E06666;
-    --radius: 14px;
-    --mono: 'IBM Plex Mono', 'Courier New', monospace;
-    --display: 'Cairo', sans-serif;
-    --body: 'Tajawal', sans-serif;
-  }
-
-  *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
-
-  body{
-    margin:0;
-    background:
-      radial-gradient(1100px 600px at 85% -10%, rgba(58,166,255,.10), transparent 60%),
-      radial-gradient(900px 500px at -10% 10%, rgba(217,169,78,.07), transparent 55%),
-      var(--ink);
-    color: var(--text);
-    font-family: var(--body);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
-
-  ::selection{ background: rgba(58,166,255,.35); }
-
-  a{ color: inherit; }
-
-  /* ===== circuit backdrop (subtle, restrained) ===== */
-  .circuit-bg{
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    opacity: .35;
-    background-image:
-      linear-gradient(rgba(58,166,255,.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(58,166,255,.05) 1px, transparent 1px);
-    background-size: 42px 42px;
-    mask-image: radial-gradient(1200px 700px at 80% 0%, black, transparent 70%);
-  }
-
-  .wrap{ position:relative; z-index:1; max-width: 1180px; margin: 0 auto; padding: 0 20px 80px; }
-
-  /* ===== header ===== */
-  header.top{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:16px; padding: 22px 0 18px;
-    border-bottom: 1px solid var(--line);
-    flex-wrap: wrap;
-  }
-  .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{
-    width: 56px; height:56px; border-radius:50%;
-    box-shadow: 0 0 0 2px var(--gold), 0 0 20px rgba(217,169,78,.55);
-    display:block;
-  }
-  .brand .titles{ display:flex; flex-direction:column; }
-  .brand .titles .main{
-    font-family: var(--display); font-weight: 800; font-size: 17px; color: var(--gold);
-    letter-spacing: .2px;
-  }
-  .brand .titles .sub{
-    font-size: 14px; color: var(--gold-soft); font-weight:600; letter-spacing:.5px;
-  }
-  .badge-ai{
-    font-family: var(--body); font-weight:700; font-size: 14px; color: var(--azure);
-    border:1px solid rgba(58,166,255,.4); padding: 5px 12px; border-radius: 999px;
-    background: rgba(58,166,255,.08); white-space:nowrap;
-  }
-
-  footer{
-    margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line);
-    text-align:center; color: var(--text); font-size: 15.5px; line-height: 2;
-  }
-  footer .brandline{ color: var(--gold-soft); font-weight:700; font-family: var(--display); font-size: 17px; }
-  footer .ltr{ direction: ltr; display:inline-block; font-family: var(--mono); }
-  footer .icon{ color: var(--gold); font-style: normal; margin-left: 3px; }
-  footer .copyright{ margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--text); line-height: 1.9; }
-
-
-  .site-nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
-  header .site-nav { flex-basis: 100%; }
-  footer .site-nav { justify-content: center; margin: 12px 0; }
-  .site-nav a { display: inline-block; padding-block: 5px; color: var(--gold-soft); text-underline-offset: 4px; }
-  .site-nav a[aria-current="page"] { font-weight: 700; color: var(--text); }
-  .site-nav a:hover, .site-content a:hover { color: var(--text); }
-  .site-content { margin: 38px auto 0; max-width: 790px; line-height: 1.9; overflow-wrap: anywhere; }
-  .site-content--wide { max-width: none; }
-  .site-content h1, .site-content h2, .site-content h3 { color: var(--gold-soft); font-family: var(--display); line-height: 1.45; }
-  .site-content h1 { font-size: clamp(27px, 5vw, 41px); margin: 0 0 16px; }
-  .site-content h2 { margin-top: 30px; }
-  .site-content a { color: var(--azure); }
-  .site-content li { margin-block: 9px; }
-  .site-content blockquote { margin-inline: 0; padding: 8px 20px; background: var(--panel); border-inline-start: 3px solid var(--gold); }
-  .site-content .lead { font-size: 1.1rem; }
-  .site-content .directory-list { padding-inline-start: 0; list-style: none; }
-  .directory-list li { padding: 10px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
-  .directory-list small { display: block; color: var(--muted); }
-  .site-content .contact-address { direction: ltr; unicode-bidi: isolate; display: inline-block; font-family: var(--mono); }
-  :focus-visible { outline: 2px solid var(--azure); outline-offset: 3px; }
-
-.notary-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.notary-table th,
-.notary-table td {
-  padding: 8px 10px;
-  border: 1px solid var(--line);
-  text-align: start;
-}
-.notary-table th {
-  background: var(--panel);
-}
-</style>
+<!-- site-style -->
 <style>
   /* ===== hero ===== */
   .hero{ padding: 46px 0 20px; text-align:center; }
@@ -439,9 +318,9 @@
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2061617274312631" crossorigin="anonymous"></script>
 <meta name="google-adsense-account" content="ca-pub-2061617274312631">
-  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-C2aEIiW-.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192-DVx5V_9B.png">
-  <link rel="apple-touch-icon" href="/assets/apple-touch-icon-CFaj0VB6.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta property="og:image" content="https://rabab-adli.com/og-logo.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="1200">
@@ -454,24 +333,7 @@
 
 <div class="wrap">
 
-  <header class="top">
-  <div class="brand">
-    <img src="./brand.png" width="56" height="56" alt="" decoding="async">
-    <div class="titles">
-      <span class="main">دليل التواصل العدلي</span>
-      <span class="sub">Rabab Adli AI</span>
-    </div>
-  </div>
-  <div class="badge-ai">رباب · عدلي · AI</div>
-  <nav class="site-nav" aria-label="التنقل الرئيسي">
-    <a href="./" aria-current="page">الرئيسية</a>
-    <a href="./#q">الدليل</a>
-    <a href="./articles/">المدونة</a>
-    <a href="./regions/">المناطق</a>
-    <a href="./about.html">من نحن</a>
-    <a href="./contact.html">تواصل معنا</a>
-  </nav>
-</header>
+  <!-- site-header -->
 
   <main>
   <section class="hero">
@@ -603,13 +465,7 @@
   </main>
 
   <footer>
-    <nav class="site-nav" aria-label="روابط التذييل">
-    <a href="./articles/">المدونة</a>
-    <a href="./privacy.html">سياسة الخصوصية</a>
-    <a href="./terms.html">الشروط</a>
-    <a href="./about.html">من نحن</a>
-    <a href="./contact.html">تواصل معنا</a>
-  </nav>
+    <!-- site-footer-links -->
     <div class="brandline">دليل التواصل العدلي — Rabab Adli AI</div>
     <div>بإشراف المحامية والمحكم التجاري د. رباب أحمد المعبي</div>
     <div class="ltr"><i class="icon">☎</i> +966 50 464 7649 &nbsp;·&nbsp; <i class="icon">☎</i> +966 57 077 3999</div>

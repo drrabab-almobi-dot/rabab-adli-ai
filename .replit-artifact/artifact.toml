@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "دليل التواصل العدلي"
+version = "1.0.0"
+id = "artifacts/adli-directory"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23938
+
+[services.development]
+run = "pnpm --filter @workspace/adli-directory run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/adli-directory", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/adli-directory/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23938"
+BASE_PATH = "/"
