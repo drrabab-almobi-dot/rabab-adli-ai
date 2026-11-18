@@ -43,7 +43,35 @@ export function footerNavigation(depth, page) {
   return navigation(footerLinks, 'روابط التذييل', depth, page);
 }
 
-export function staticPage({ pathname, title, description, body, schema = [], article = false }, siteBase) {
+
+const MAX_DESCRIPTION = 155;
+export function capDescription(text) {
+  const value = String(text).trim();
+  if (value.length <= MAX_DESCRIPTION) return value;
+  const cut = value.slice(0, MAX_DESCRIPTION);
+  const space = cut.lastIndexOf(' ');
+  return `${(space > 80 ? cut.slice(0, space) : cut).replace(/[\s،,.؛:—-]+$/u, '')}…`;
+}
+
+function defaultSchema(pathname, title, description, url) {
+  const base = { '@context': 'https://schema.org', name: title, description, url, inLanguage: 'ar' };
+  const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'الرئيسية', item: `${site}/` },
+    { '@type': 'ListItem', position: 2, name: title, item: url },
+  ] };
+  if (pathname === 'about.html') {
+    return [{ ...base, '@type': 'AboutPage', about: { '@type': 'Organization', name: company, url: companySite, telephone: '+966504647649' } }, crumbs];
+  }
+  if (pathname === 'contact.html') {
+    return [{ ...base, '@type': 'ContactPage', about: { '@type': 'Organization', name: company, url: companySite, telephone: '+966504647649' } }, crumbs];
+  }
+  if (pathname.startsWith('articles/') && pathname.endsWith('/')) return [{ ...base, '@type': ['CollectionPage', 'Blog'] }, crumbs];
+  if (pathname.startsWith('regions/')) return [{ ...base, '@type': 'CollectionPage' }, crumbs];
+  return [{ ...base, '@type': 'WebPage' }, crumbs];
+}
+
+export function staticPage({ pathname, title, description: rawDescription, body, schema: rawSchema = [], article = false }, siteBase) {
+  const description = capDescription(rawDescription);
   const depth = pathname.split('/').length - 1;
   const root = '../'.repeat(depth) || './';
   const pageDirectory = pathname.slice(0, pathname.lastIndexOf('/') + 1);
@@ -52,6 +80,7 @@ export function staticPage({ pathname, title, description, body, schema = [], ar
     ? `<base href="${escapeHtml(siteBase + pageDirectory)}">\n`
     : '';
   const url = `${site}/${pathname.split('/').map(encodeURIComponent).join('/')}`;
+  const schema = rawSchema.length ? rawSchema : defaultSchema(pathname, title, description, url);
   const safeTitle = escapeHtml(title);
   const safeDescription = escapeHtml(description);
   return `<!DOCTYPE html>
