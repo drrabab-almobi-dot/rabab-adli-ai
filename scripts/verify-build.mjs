@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import articles from '../content/articles.mjs';
 import information from '../content/information.mjs';
 import regions from '../content/regions.mjs';
-import { site } from './site-layout.mjs';
+import { adMeta, adScript, site } from './site-layout.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
@@ -33,8 +33,8 @@ function requireFile(relativePath) {
 requireFile('index.html');
 requireFile('robots.txt');
 requireFile('sitemap.xml');
-if (readFileSync(requireFile('ads.txt'), 'utf8').trim() !== '#') {
-  fail('ads.txt must be a comment-only placeholder');
+if (readFileSync(requireFile('ads.txt'), 'utf8').trim() !== 'google.com, pub-2061617274312631, DIRECT, f08c47fec0942fa0') {
+  fail('ads.txt must contain the AdSense publisher line');
 }
 
 // Preserve the published root URLs alongside the assets that Vite fingerprints.
@@ -89,9 +89,9 @@ for (const page of allPages) {
   if (!sitemapUrls.has(url) || !head.includes(`<link rel="canonical" href="${url}">`)) {
     fail(`Missing sitemap entry or canonical URL: ${page}`);
   }
-  if (/adsbygoogle|google-adsense-account|ca-pub-\d+/i.test(content) ||
+  if (head.split(adScript).length !== 2 || head.split(adMeta).length !== 2 ||
       !content.includes('aria-label="التنقل الرئيسي"')) {
-    fail(`Missing page navigation or unexpected AdSense configuration: ${page}`);
+    fail(`Missing page navigation or incorrect AdSense configuration: ${page}`);
   }
   const footer = content.match(/<footer>([\s\S]*?)<\/footer>/)?.[1] ?? '';
   for (const link of ['about.html', 'privacy.html', 'terms.html', 'contact.html']) {
